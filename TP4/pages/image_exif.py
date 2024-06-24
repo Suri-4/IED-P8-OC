@@ -81,5 +81,7 @@ if __name__ == "__main__":
 
             # Enregistrer une nouvelle image avec les nouvelles métadonnées
             img.save("new_img.jpg", exif=new_exif_data)
+            # Ajouter un bouton pour télécharger l'image
+            st.download_button("Download Image", "new_img.jpg", "Cliquez ici pour télécharger l'image.")
 
             st.success("Image saved successfully.")
