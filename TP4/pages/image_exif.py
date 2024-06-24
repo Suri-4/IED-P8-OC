@@ -11,6 +11,7 @@
 import streamlit as st
 from ast import literal_eval
 from PIL import Image, ExifTags
+from io import BytesIO
 
 # Afficher les métadonnées de l'image dans un formulaire
 def display_form_metadata(formulaire, data):
@@ -79,9 +80,17 @@ if __name__ == "__main__":
 
             update_metadata(form, new_exif_data)
 
+            img_buffer_data = BytesIO()
             # Enregistrer une nouvelle image avec les nouvelles métadonnées
-            img.save("new_img.jpg", exif=new_exif_data)
-            # Ajouter un bouton pour télécharger l'image
-            st.download_button("Download Image", "new_img.jpg", "Cliquez ici pour télécharger l'image.")
+            img.save(img_buffer_data, format="JPEG", exif=new_exif_data)
+            img_buffer_data.seek(0)
 
+
+            # Passer le tampon au bouton de téléchargement
+            st.download_button(label="Download Image",
+                            data=img_buffer_data,
+                            file_name="updated_image.jpg",
+                            mime="image/jpeg",
+                            help="Cliquez ici pour télécharger l'image.")
+    
             st.success("Image saved successfully.")
